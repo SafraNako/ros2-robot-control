@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ros2-robot-control"
+version = "0.1.0"
+description = "A small robot control package for ROS 2: a pure-Python core (differential-drive kinematics and odometry, PID, go-to-goal, pure pursuit, scan-based safety, command mux) validated against closed forms and brute force, plus thin rclpy nodes tested over real DDS"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "SafraNako" }]
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+plots = [
+    "matplotlib>=3.7",
+]
+dev = [
+    "pytest>=7.4",
+    "matplotlib>=3.7",
+]
+
+[project.scripts]
+robot = "robot_kontrol.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests"]
+markers = [
+    "ros: needs rclpy (a sourced ROS 2 environment); skipped where it is not importable",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:matplotlib",
+    "ignore:.*parseAll.*:DeprecationWarning",
+]

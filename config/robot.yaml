@@ -1,0 +1,62 @@
+# Parameters of every node, keyed by node name. Numbers meant as doubles must be written with a decimal point (50.0, not 50).
+robot_sim:
+  ros__parameters:
+    rate: 50.0                  # simulation and odometry rate (Hz)
+    scan_rate: 10.0
+    scan_beams: 360
+    scan_max_range: 6.0
+    cmd_timeout: 0.5            # the simulated motor driver stops when commands stop for this long (s)
+    tau_v: 0.15                 # motor lag time constants (s)
+    tau_w: 0.10
+    robot_radius: 0.18
+    wheel_radius: 0.05
+    track: 0.30
+    start_pose: [0.0, 0.0, 0.0]
+    # world: circles are cx, cy, r (r <= 0 is ignored); walls are x0, y0, x1, y1 (a zero-length wall is ignored)
+    circles: [2.0, 1.0, 0.4, -1.5, 2.5, 0.5]
+    walls: [-5.0, -5.0, 5.0, -5.0, 5.0, -5.0, 5.0, 5.0, 5.0, 5.0, -5.0, 5.0, -5.0, 5.0, -5.0, -5.0]
+
+robot_mux:
+  ros__parameters:
+    rate: 20.0
+    teleop_timeout: 0.5
+    nav_timeout: 0.5
+
+robot_safety:
+  ros__parameters:
+    rate: 20.0
+    radius: 0.22                # footprint radius plus a little clearance (m)
+    decel: 0.8                  # braking deceleration the robot can really deliver (m/s^2)
+    margin: 0.10                # distance kept between the stopped robot and an obstacle (m)
+    horizon: 3.0
+    cmd_timeout: 0.5
+    scan_timeout: 0.5
+    v_max: 0.6
+    w_max: 1.5
+    a_max: 0.8
+    alpha_max: 3.0
+    v_min: -0.3
+
+robot_go_to_goal:
+  ros__parameters:
+    rate: 20.0
+    k_rho: 0.6                  # the stability conditions k_rho > 0, k_beta < 0, k_alpha > k_rho are checked at start-up
+    k_alpha: 1.8
+    k_beta: -0.5
+    k_final: 1.5
+    v_max: 0.5
+    w_max: 1.5
+    pos_tol: 0.03
+    yaw_tol: 0.05
+    allow_reverse: true
+
+robot_pure_pursuit:
+  ros__parameters:
+    rate: 20.0
+    lookahead: 0.5
+    v_nominal: 0.4
+    v_min: 0.05
+    w_max: 1.5
+    a_lat_max: 0.5
+    decel: 0.4
+    goal_tol: 0.05

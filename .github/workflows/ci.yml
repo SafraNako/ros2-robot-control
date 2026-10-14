@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  core:
+    # the pure-Python core, the simulator, the CLI and the figures; the ROS tests skip themselves where rclpy is absent
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Run tests
+        run: pytest -v
+
+  ros:
+    # the same suite plus the ROS 2 integration tests: every node as its own process, real DDS, a real launch file
+    runs-on: ubuntu-latest
+    container: ros:jazzy-ros-core
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests (core and ROS 2)
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          python3 -m pytest tests -v -p no:cacheprovider
